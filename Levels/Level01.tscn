@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Terrain/1 - Foreground_scenery.png" type="Texture" id=2]
@@ -8,6 +8,17 @@
 [ext_resource path="res://Assets/Terrain/4 - Cloud_cover_2.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Terrain/2 - Hills.png" type="Texture" id=7]
 [ext_resource path="res://Scripts/FallZone.gd" type="Script" id=8]
+[ext_resource path="res://Items/Apple.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Items/Banana.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Items/Cherry.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Items/Kiwi.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Items/Melon.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Items/Orange.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Items/Pineapple.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Items/Strawberry.tscn" type="PackedScene" id=16]
+
+[sub_resource type="RectangleShape2D" id=41]
+extents = Vector2( 40, 10 )
 
 [sub_resource type="ConvexPolygonShape2D" id=5]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
@@ -1011,10 +1022,19 @@ shader = SubResource( 39 )
 shader_param/Direction = Vector2( 1, 0 )
 shader_param/Speed = 0.02
 
-[sub_resource type="RectangleShape2D" id=41]
-extents = Vector2( 40, 10 )
-
 [node name="Level01" type="Node2D"]
+
+[node name="fall_zone" type="Area2D" parent="."]
+position = Vector2( 464, 304 )
+script = ExtResource( 8 )
+
+[node name="texture" type="Sprite" parent="fall_zone"]
+scale = Vector2( 0.25, 1 )
+texture = ExtResource( 5 )
+
+[node name="collision" type="CollisionShape2D" parent="fall_zone"]
+position = Vector2( 0, -32 )
+shape = SubResource( 41 )
 
 [node name="tilemap" type="TileMap" parent="."]
 tile_set = SubResource( 4 )
@@ -1034,7 +1054,7 @@ motion_mirroring = Vector2( 576, 0 )
 
 [node name="texture" type="Sprite" parent="parallax_background/sky"]
 position = Vector2( 0, -190 )
-scale = Vector2( 2, 2 )
+scale = Vector2( 2, 4 )
 texture = ExtResource( 5 )
 centered = false
 
@@ -1078,15 +1098,30 @@ scale = Vector2( 2, 2 )
 texture = ExtResource( 2 )
 centered = false
 
-[node name="fall_zone" type="Area2D" parent="."]
-position = Vector2( 448, 272 )
-script = ExtResource( 8 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="fruits" type="Node2D" parent="."]
+position = Vector2( 176, 128 )
 
-[node name="collision" type="CollisionShape2D" parent="fall_zone"]
-position = Vector2( 8, 0 )
-shape = SubResource( 41 )
+[node name="Apple" parent="fruits" instance=ExtResource( 9 )]
+position = Vector2( -32, -32 )
+
+[node name="Banana" parent="fruits" instance=ExtResource( 10 )]
+
+[node name="Cherry" parent="fruits" instance=ExtResource( 11 )]
+position = Vector2( 64, 0 )
+
+[node name="Kiwi" parent="fruits" instance=ExtResource( 12 )]
+position = Vector2( 48, -64 )
+
+[node name="Melon" parent="fruits" instance=ExtResource( 13 )]
+position = Vector2( 80, -64 )
+
+[node name="Orange" parent="fruits" instance=ExtResource( 14 )]
+position = Vector2( 32, 0 )
+
+[node name="Pineapple" parent="fruits" instance=ExtResource( 15 )]
+position = Vector2( 0, -32 )
+
+[node name="Strawberry" parent="fruits" instance=ExtResource( 16 )]
+position = Vector2( 80, -96 )
 
 [connection signal="body_entered" from="fall_zone" to="fall_zone" method="_on_body_entered"]
