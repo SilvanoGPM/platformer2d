@@ -51,3 +51,4 @@ func _set_animation() -> void:
 	
 	if $animation.assigned_animation != animation:
 		$animation.play(animation)
+
