@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Terrain/1 - Foreground_scenery.png" type="Texture" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://Items/Orange.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Items/Pineapple.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Items/Strawberry.tscn" type="PackedScene" id=16]
+[ext_resource path="res://Scenes/Mushroom.tscn" type="PackedScene" id=17]
 
 [sub_resource type="RectangleShape2D" id=41]
 extents = Vector2( 40, 10 )
@@ -1046,6 +1047,9 @@ tile_data = PoolIntArray( -524291, 37, 0, -524290, 37, 0, -524289, 37, 0, -58978
 
 [node name="player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 16, 96 )
+
+[node name="mushroom" parent="." instance=ExtResource( 17 )]
+position = Vector2( 240, 128 )
 
 [node name="parallax_background" type="ParallaxBackground" parent="."]
 

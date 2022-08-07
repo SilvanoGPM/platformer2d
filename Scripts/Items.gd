@@ -1,6 +1,6 @@
 extends Area2D
 
-const ANIMATION_COLLECTED_NAME = 'collected'
+const ANIMATION_COLLECTED_NAME: String = 'collected'
 
 func _ready() -> void:
 	connect('body_entered', self, '_on_body_entered')

@@ -30,7 +30,10 @@ func _get_input() -> void:
 
 	_set_animation()
 
-func _input(event: InputEvent):
+func _input(event: InputEvent) -> void:
+	_check_jump(event)
+
+func _check_jump(event: InputEvent) -> void:
 	if event.is_action_pressed('jump') and is_grounded:
 		velocity.y = jump_force / 2
 
