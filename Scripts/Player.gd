@@ -2,12 +2,16 @@ extends KinematicBody2D
 
 var velocity: Vector2 = Vector2.ZERO
 var is_grounded: bool = true
+var hurted: bool = false
+var knockback_direction: int = 0
 
 onready var raycasts: Node2D = $raycasts
 
 export (int) var move_speed = 480
 export (int) var jump_force = -720
 export (int) var gravity = 1200
+export (int) var health = 3
+export (int) var knockback = 500
 
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
@@ -15,6 +19,12 @@ func _physics_process(delta: float) -> void:
 	_get_input()
 
 	velocity = move_and_slide(velocity)
+
+	for platforms in get_slide_count():
+		var collision = get_slide_collision(platforms)
+		
+		if collision.collider.has_method('collide_with'):
+			collision.collider.collide_with(collision, self)
 
 func _get_input() -> void:
 	velocity.x = 0
@@ -25,6 +35,7 @@ func _get_input() -> void:
 
 	if move_direction != 0:
 		$texture.scale.x = move_direction
+		knockback_direction = move_direction
 
 	is_grounded = _check_is_grouded()
 
@@ -45,13 +56,40 @@ func _check_is_grouded() -> bool:
 	return false
 
 func _set_animation() -> void:
-	var animation = 'idle'
+	var animation: String = 'idle'
 	
 	if not is_grounded:
 		animation = 'jump'
 	elif velocity.x != 0:
 		animation = 'run'
 	
+	if velocity.y > 0 and not is_grounded:
+		animation = 'fall' 
+	
+	if hurted:
+		animation = 'hit'
+	
 	if $animation.assigned_animation != animation:
 		$animation.play(animation)
 
+func _on_animation_finished(animation_name: String):
+	if animation_name == 'hit':
+		hurted = false
+		$hurtbox/collision.set_deferred('disbled', false)
+
+		if health <= 0:
+			queue_free()
+			var _reload = get_tree().reload_current_scene()
+
+func _on_hurtbox_body_entered(_body: Node):
+	if not hurted:
+		health -= 1
+		hurted = true
+		
+		$hurtbox/collision.set_deferred('disbled', true)
+		
+		_knockback()
+
+func _knockback():
+	velocity.x = -knockback_direction * knockback
+	velocity = move_and_slide(velocity)

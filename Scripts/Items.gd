@@ -3,8 +3,8 @@ extends Area2D
 const ANIMATION_COLLECTED_NAME: String = 'collected'
 
 func _ready() -> void:
-	connect('body_entered', self, '_on_body_entered')
-	$animation.connect('animation_finished', self, '_on_animation_finished')
+	var _body_entered = connect('body_entered', self, '_on_body_entered')
+	var _animation_end = $animation.connect('animation_finished', self, '_on_animation_finished')
 	
 func _on_body_entered(_body: Node) -> void:
 	if not $animation.assigned_animation == ANIMATION_COLLECTED_NAME:
