@@ -20,7 +20,7 @@ func _physics_process(delta: float) -> void:
 	position += velocity * delta
 	
 	
-func collide_with(collision: KinematicCollision2D, collider: KinematicBody2D) -> void:
+func collide_with(_collision: KinematicCollision2D, _collider: KinematicBody2D) -> void:
 	if not is_triggered:
 		is_triggered = true
 		animation.play('shake')

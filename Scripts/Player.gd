@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+const UP = Vector2.UP
+
 var velocity: Vector2 = Vector2.ZERO
 var is_grounded: bool = true
 var hurted: bool = false
@@ -15,10 +17,16 @@ export (int) var knockback = 500
 
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
+	velocity.x = 0
 	
-	_get_input()
+	if not hurted:
+		_get_input()
 
-	velocity = move_and_slide(velocity)
+	velocity = move_and_slide(velocity, UP)
+
+	is_grounded = _check_is_grouded()
+
+	_set_animation()
 
 	for platforms in get_slide_count():
 		var collision = get_slide_collision(platforms)
@@ -37,12 +45,10 @@ func _get_input() -> void:
 		$texture.scale.x = move_direction
 		knockback_direction = move_direction
 
-	is_grounded = _check_is_grouded()
-
-	_set_animation()
 
 func _input(event: InputEvent) -> void:
-	_check_jump(event)
+	if not hurted:
+		_check_jump(event)
 
 func _check_jump(event: InputEvent) -> void:
 	if event.is_action_pressed('jump') and is_grounded:
@@ -75,7 +81,7 @@ func _set_animation() -> void:
 func _on_animation_finished(animation_name: String):
 	if animation_name == 'hit':
 		hurted = false
-		$hurtbox/collision.set_deferred('disbled', false)
+		$hurtbox/collision.set_deferred('disabled', false)
 
 		if health <= 0:
 			queue_free()
@@ -86,7 +92,7 @@ func _on_hurtbox_body_entered(_body: Node):
 		health -= 1
 		hurted = true
 		
-		$hurtbox/collision.set_deferred('disbled', true)
+		$hurtbox/collision.set_deferred('disabled', true)
 		
 		_knockback()
 
