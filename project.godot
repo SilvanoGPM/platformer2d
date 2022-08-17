@@ -24,6 +24,11 @@ config/name="Platformer 2D"
 run/main_scene="res://Levels/Level01.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GameManager="*res://Scripts/GameManager.gd"
+Hud="*res://Prefabs/HUD.tscn"
+
 [display]
 
 window/size/width=320

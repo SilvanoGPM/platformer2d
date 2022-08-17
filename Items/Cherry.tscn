@@ -125,6 +125,7 @@ tracks/2/keys = {
 }
 
 [node name="Cherry" instance=ExtResource( 3 )]
+points = 2
 
 [node name="texture" parent="." index="0"]
 texture = ExtResource( 2 )
