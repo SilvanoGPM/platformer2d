@@ -18,7 +18,7 @@ func _start_tween() -> void:
 	var move_direction = (Vector2.RIGHT if horizontal else Vector2.UP) * distance
 	var duration = move_direction.length() / float(speed * 16)
 	
-	tween.interpolate_property(
+	var _interpolate = tween.interpolate_property(
 		self, 
 		'follow',
 		Vector2.ZERO,
@@ -29,7 +29,7 @@ func _start_tween() -> void:
 		WAIT_DURATION
 	)
 	
-	tween.interpolate_property(
+	var _interpolate2 = tween.interpolate_property(
 		self,
 		'follow',
 		move_direction,		
@@ -40,7 +40,7 @@ func _start_tween() -> void:
 		duration + WAIT_DURATION * 2
 	)
 	
-	tween.start()
+	var _start = tween.start()
 
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	platform.position = platform.position.linear_interpolate(follow, 0.05)

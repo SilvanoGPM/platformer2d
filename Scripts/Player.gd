@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal change_life(health)
+
 const UP = Vector2.UP
 
 var velocity: Vector2 = Vector2.ZERO
@@ -12,8 +14,15 @@ onready var raycasts: Node2D = $raycasts
 export (int) var move_speed = 480
 export (int) var jump_force = -720
 export (int) var gravity = 1200
+export (int) var max_health = 3
 export (int) var health = 3
 export (int) var knockback = 500
+
+func _ready() -> void:
+	var node: Control = get_parent().get_node('hud/container/health_holder')
+	
+	connect('change_life', node, '_on_change_life')
+	emit_signal('change_life', max_health)
 
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
@@ -91,6 +100,8 @@ func _on_hurtbox_body_entered(_body: Node):
 	if not hurted:
 		health -= 1
 		hurted = true
+		
+		emit_signal('change_life', health)
 		
 		$hurtbox/collision.set_deferred('disabled', true)
 		

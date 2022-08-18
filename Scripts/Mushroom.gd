@@ -12,8 +12,8 @@ export (int) var bounce_force = 350
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
 	
-	velocity.x = speed * move_direction	
-	
+	velocity.x = speed * move_direction if not hitted else 0
+
 	velocity = move_and_slide(velocity)
 	
 	_set_animation()
@@ -46,4 +46,5 @@ func _on_animation_finished(animation_name: String):
 func _on_hitbox_body_entered(body: Node):
 	hitted = true
 	health -= 1
+	body.velocity.y = 0
 	body.velocity.y -= bounce_force
