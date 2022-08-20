@@ -1,6 +1,6 @@
 extends Area2D
 
-export var points = 1
+export (int) var points = 1
 
 func _ready() -> void:
 	var _body_entered = connect('body_entered', self, '_on_body_entered')

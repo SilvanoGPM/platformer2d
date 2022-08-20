@@ -21,8 +21,10 @@ export (int) var knockback = 500
 func _ready() -> void:
 	var node: Control = get_parent().get_node('hud/container/health_holder')
 	
-	connect('change_life', node, '_on_change_life')
+	var _connect = connect('change_life', node, '_on_change_life')
 	emit_signal('change_life', max_health)
+
+	position.x = GameManager.checkpoint_position + 50
 
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
@@ -53,7 +55,6 @@ func _get_input() -> void:
 	if move_direction != 0:
 		$texture.scale.x = move_direction
 		knockback_direction = move_direction
-
 
 func _input(event: InputEvent) -> void:
 	if not hurted:
@@ -87,7 +88,7 @@ func _set_animation() -> void:
 	if $animation.assigned_animation != animation:
 		$animation.play(animation)
 
-func _on_animation_finished(animation_name: String):
+func _on_animation_finished(animation_name: String) -> void:
 	if animation_name == 'hit':
 		hurted = false
 		$hurtbox/collision.set_deferred('disabled', false)
@@ -96,7 +97,7 @@ func _on_animation_finished(animation_name: String):
 			queue_free()
 			var _reload = get_tree().reload_current_scene()
 
-func _on_hurtbox_body_entered(_body: Node):
+func _on_hurtbox_body_entered(_body: Node) -> void:
 	if not hurted:
 		health -= 1
 		hurted = true
@@ -107,6 +108,9 @@ func _on_hurtbox_body_entered(_body: Node):
 		
 		_knockback()
 
-func _knockback():
+func _knockback() -> void:
 	velocity.x = -knockback_direction * knockback
 	velocity = move_and_slide(velocity)
+
+func _hit_checkpoint() -> void:
+	GameManager.checkpoint_position = position.x

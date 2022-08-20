@@ -251,7 +251,7 @@ extents = Vector2( 8.5, 12.5 )
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 10, 8.5 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=["player"]]
 position = Vector2( 0, -16 )
 collision_mask = 94
 script = ExtResource( 2 )

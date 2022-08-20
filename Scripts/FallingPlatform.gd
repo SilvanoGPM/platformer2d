@@ -19,19 +19,18 @@ func _physics_process(delta: float) -> void:
 	
 	position += velocity * delta
 	
-	
 func collide_with(_collision: KinematicCollision2D, _collider: KinematicBody2D) -> void:
 	if not is_triggered:
 		is_triggered = true
 		animation.play('shake')
 		velocity = Vector2.ZERO
-	
-func _on_animation_finished(animation_name: String):
+
+func _on_animation_finished(animation_name: String) -> void:
 	if animation_name == 'shake':
 		set_physics_process(true)
 		timer.start(reset_timer)
 
-func _on_timer_timeout():
+func _on_timer_timeout() -> void:
 	set_physics_process(false)
 
 	yield(get_tree(), 'physics_frame')

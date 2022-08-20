@@ -6,7 +6,7 @@
 [sub_resource type="GDScript" id=5]
 script/source = "extends Area2D
 
-export var points = 1
+export (int) var points = 1
 
 func _ready() -> void:
 	var _body_entered = connect('body_entered', self, '_on_body_entered')
@@ -14,8 +14,6 @@ func _ready() -> void:
 	
 func _on_body_entered(_body: Node) -> void:
 	GameManager.fruits += points
-	
-	print(GameManager.fruits)
 	
 	if not $animation.assigned_animation == 'collected':
 		$animation.play('collected')

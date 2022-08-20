@@ -2,7 +2,7 @@ extends Node2D
 
 const WAIT_DURATION: float = 1.0
 
-var follow = Vector2.ZERO
+var follow: Vector2 = Vector2.ZERO
 
 onready var platform: KinematicBody2D = $platform
 onready var tween: Tween = $tween
@@ -15,8 +15,8 @@ func _ready() -> void:
 	_start_tween()
 
 func _start_tween() -> void:
-	var move_direction = (Vector2.RIGHT if horizontal else Vector2.UP) * distance
-	var duration = move_direction.length() / float(speed * 16)
+	var move_direction: Vector2 = (Vector2.RIGHT if horizontal else Vector2.UP) * distance
+	var duration: float = move_direction.length() / float(speed * 16)
 	
 	var _interpolate = tween.interpolate_property(
 		self, 
@@ -42,5 +42,5 @@ func _start_tween() -> void:
 	
 	var _start = tween.start()
 
-func _physics_process(_delta: float):
+func _physics_process(_delta: float) -> void:
 	platform.position = platform.position.linear_interpolate(follow, 0.05)

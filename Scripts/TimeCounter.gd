@@ -8,8 +8,8 @@ func _process(_delta: float) -> void:
 		minutes -= 1
 		seconds = 60		
 
-	var seconds_separator = get_separator(seconds >= 10, " : ", " : 0")
-	var minutes_separator = get_separator(minutes >= 10, "", "0")
+	var seconds_separator: String = get_separator(seconds >= 10, " : ", " : 0")
+	var minutes_separator: String = get_separator(minutes >= 10, "", "0")
 	
 	$seconds.set_text(seconds_separator + str(seconds))
 	$minutes.set_text(minutes_separator + str(minutes))
@@ -21,9 +21,9 @@ func _process(_delta: float) -> void:
 		yield(get_tree().create_timer(1), 'timeout')
 			
 		var _reload = get_tree().reload_current_scene()
-			
-func get_separator(condition: bool, x: String, y: String):
+
+func get_separator(condition: bool, x: String, y: String) -> String:
 	return x if condition else y
 
-func _on_timer_timeout():
+func _on_timer_timeout() -> void:
 	seconds -= 1

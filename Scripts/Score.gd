@@ -1,7 +1,7 @@
 extends Label
 
 func _process(_delta: float) -> void:
-	var zeros = "000"
+	var zeros: String = "000"
 	
 	if GameManager.fruits >= 10:
 		zeros = "00"

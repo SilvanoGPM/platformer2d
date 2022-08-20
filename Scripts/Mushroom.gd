@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var velocity: Vector2 = Vector2.ZERO 
-var hitted = false
+var hitted: bool = false
 
 export (int) var gravity = 1200
 export (int) var speed = 64
@@ -19,7 +19,7 @@ func _physics_process(delta: float) -> void:
 	_set_animation()
 	
 func _set_animation() -> void:
-	var animation = 'run'
+	var animation: String = 'run'
 	
 	if $raycast_wall.is_colliding():
 		animation = 'idle'
@@ -29,7 +29,7 @@ func _set_animation() -> void:
 
 	$animation.play(animation)
 
-func _on_animation_finished(animation_name: String):
+func _on_animation_finished(animation_name: String) -> void:
 	if animation_name == 'idle':
 		move_direction *= -1
 		
@@ -43,7 +43,7 @@ func _on_animation_finished(animation_name: String):
 			$hitbox/coliision.set_deferred('disabled', true)
 			queue_free()
 
-func _on_hitbox_body_entered(body: Node):
+func _on_hitbox_body_entered(body: Node) -> void:
 	hitted = true
 	health -= 1
 	body.velocity.y = 0
