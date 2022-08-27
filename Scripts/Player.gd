@@ -16,7 +16,7 @@ export (int) var jump_force = -720
 export (int) var gravity = 1200
 export (int) var max_health = 3
 export (int) var health = 3
-export (int) var knockback = 500
+export (int) var knockback = 1200
 
 func _ready() -> void:
 	var node: Control = get_parent().get_node('hud/container/health_holder')
@@ -24,7 +24,8 @@ func _ready() -> void:
 	var _connect = connect('change_life', node, '_on_change_life')
 	emit_signal('change_life', max_health)
 
-	position.x = GameManager.checkpoint_position + 50
+#	position.x = GameManager.checkpoint_position
+	position.y -= 50
 
 func _physics_process(delta: float) -> void:
 	velocity.y += gravity * delta
@@ -54,6 +55,7 @@ func _get_input() -> void:
 
 	if move_direction != 0:
 		$texture.scale.x = move_direction
+		$step_particles.scale.x = move_direction		
 		knockback_direction = move_direction
 
 func _input(event: InputEvent) -> void:
@@ -78,6 +80,7 @@ func _set_animation() -> void:
 		animation = 'jump'
 	elif velocity.x != 0:
 		animation = 'run'
+		$step_particles.emitting = true
 	
 	if velocity.y > 0 and not is_grounded:
 		animation = 'fall' 
@@ -88,15 +91,6 @@ func _set_animation() -> void:
 	if $animation.assigned_animation != animation:
 		$animation.play(animation)
 
-func _on_animation_finished(animation_name: String) -> void:
-	if animation_name == 'hit':
-		hurted = false
-		$hurtbox/collision.set_deferred('disabled', false)
-
-		if health <= 0:
-			queue_free()
-			var _reload = get_tree().reload_current_scene()
-
 func _on_hurtbox_body_entered(_body: Node) -> void:
 	if not hurted:
 		health -= 1
@@ -104,12 +98,27 @@ func _on_hurtbox_body_entered(_body: Node) -> void:
 		
 		emit_signal('change_life', health)
 		
-		$hurtbox/collision.set_deferred('disabled', true)
-		
 		_knockback()
+				
+		$hurtbox/collision.set_deferred('disabled', true)
+
+		yield(get_tree().create_timer(0.5), 'timeout')
+		
+		$hurtbox/collision.set_deferred('disabled', false)
+		
+		hurted = false
+
+		if health <= 0:
+			queue_free()
+			var _reload = get_tree().reload_current_scene()
 
 func _knockback() -> void:
-	velocity.x = -knockback_direction * knockback
+	if $raycasts/right.is_colliding():
+		velocity.x = -knockback_direction * knockback
+	
+	if $raycasts/left.is_colliding():
+		velocity.x = knockback_direction * knockback
+	
 	velocity = move_and_slide(velocity)
 
 func _hit_checkpoint() -> void:

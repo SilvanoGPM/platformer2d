@@ -12,3 +12,5 @@ func _on_body_entered(body: Node) -> void:
 		yield($animation, 'animation_finished')
 		$animation.play('checked')
 		
+		$collision.queue_free()
+		
